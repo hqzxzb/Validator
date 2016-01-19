@@ -36,7 +36,7 @@
 |value|待验证的值获取方法，若框架无法自动获取，需要通过该参数自定义值获取方法function，自定义方法需返回待验证的值。|
 |rules|验证规则，及规则需要的输入参数。可配置多个。|
 |msg|验证规则验证失败的提示信息，每一个规则对应一个提示信息，若不设定，则使用默认提示信息。|
-|event|验证事件绑定的方式，若为input/textarea/radio/checkbox将默认绑定为<code>blur</code>事件，若需要自定义，可通过此参数设定具体的事件逻辑，触发元素的<code>validator</code>"事件。|
+|event|验证事件绑定的方式，若为input/textarea/radio/checkbox将默认绑定为<code>blur</code>事件，若需要自定义，可通过此参数设定具体的事件逻辑，触发元素的<code>validate</code>事件。|
 |msgSelector|提示信息显示位置筛选器字符串。框架根据该参数将该元素设定的验证规则中第一个验证失败的提示信息，显示到筛选器字符串指定的元素HTML代码中。|
 |callback|验证完成回调方法，默认传入参数为错误信息数组error[]，可根据使用场景设定自定义回调方法。|
 
