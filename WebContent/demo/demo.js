@@ -3,8 +3,9 @@
 	// 绑定自定义输入域的输入方法
 	var customEl = document.querySelector(".custom");
 	customEl.addEventListener("click", function() {
-		this.setAttribute("data-val",
-				this.getAttribute("data-val") === "1" ? "" : "1");
+		var val = parseInt(this.getAttribute("data-val") === "" ? 0 : this
+				.getAttribute("data-val"));
+		this.setAttribute("data-val", val === 2 ? "" : val + 1);
 	}, false);
 })();
 
@@ -85,13 +86,17 @@ var fields = {
 	".custom" : {
 		value : function() {
 			// 自定义输入域获取值方法
-			return document.querySelector(".custom").getAttribute("data-val");
+			var val = document.querySelector(".custom")
+					.getAttribute("data-val");
+			return val === "" ? "" : parseInt(val);
 		},
 		rules : {
-			required : true
+			required : true,
+			equals : 2
 		},
 		msg : {
-			required : "请输入自定义值"
+			required : "请输入自定义值",
+			equals : "自定义值必须为'%{0}'"
 		},
 		event : function() {
 			// 自定义输入域触发validate事件方法
@@ -103,6 +108,27 @@ var fields = {
 					}, false);
 		},
 		msgSelector : ".custom_msg"
+	},
+	".url" : {
+		rules : {
+			required : true,
+			url : true
+		},
+		msg : {
+			required : "请输入URL地址"
+		},
+		msgSelector : ".url_msg"
+	},
+	".money" : {
+		rules : {
+			required : true,
+			number : null
+		},
+		msg : {
+			required : "请输入金额",
+			number : "请输入正确的金额"
+		},
+		msgSelector : ".money_msg"
 	}
 };
 // 初始化验证器

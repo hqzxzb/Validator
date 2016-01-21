@@ -63,6 +63,17 @@
 		email : function(value, param, msg) {
 			var reg = /^[0-9a-zA-Z_][-_\.0-9a-zA-Z-]{0,63}@([0-9a-zA-Z][0-9a-zA-Z-]*\.)+[a-zA-Z]{2,4}$/ig;
 			return reg.test(value) ? null : msg;
+		},
+		equals : function(value, param, msg) {
+			return value === param ? null : msg;
+		},
+		url : function(value, param, msg) {
+			var reg = /[a-zA-z]+:\/\/[^\s]*/g;
+			return reg.test(value) ? null : msg;
+		},
+		number : function(value, param, msg) {
+			var reg = /^(?:-?[1-9]{1}\d+|-?[1-9]{1}\d{0,2}(,\d{3})*|0){1}(?:\.\d+)?$/;
+			return reg.test(value) ? null : msg;
 		}
 	};
 
@@ -73,7 +84,34 @@
 		required : "不能为空",
 		identityCard : "身份证号格式不正确",
 		mobile : "手机号格式不正确",
-		email : "邮箱格式不正确"
+		email : "邮箱格式不正确",
+		equals : "不等于 %{0}",
+		url : "URL格式不正确",
+		number : "数字格式不正确"
+	};
+
+	/**
+	 * 
+	 * @Title:formatMsg
+	 * @Description:格式化返回值
+	 * @param param
+	 * @param msg
+	 * @author ZHAOBO
+	 * @修改时间：2016年1月21日 下午9:28:37
+	 * @修改内容：创建
+	 */
+	Validator.prototype.formatMsg = function(param, msg) {
+		if (msg === null) {
+			;
+		} else if (param instanceof Array) {
+			for (var i = 0; i < param.length; i++) {
+				msg = msg
+						.replace(new RegExp("%\\{" + i + "\\}", "g"), param[i]);
+			}
+		} else {
+			msg = msg.replace(new RegExp("%\\{0\\}", "g"), param);
+		}
+		return msg;
 	};
 
 	/**
@@ -271,8 +309,8 @@
 			for ( var key in field.rules) {
 				// 获取提示信息
 				var msg = field.msg[key] || this.defaultMsg[key];
-				var error = this.validateRules[key](value, field.rules[key],
-						msg);
+				var error = this.formatMsg(field.rules[key],
+						this.validateRules[key](value, field.rules[key], msg));
 				if (typeof error !== "undefined" && error !== null) {
 					errors.push(error);
 					// 全局记录错误信息
