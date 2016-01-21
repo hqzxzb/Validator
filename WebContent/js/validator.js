@@ -23,20 +23,20 @@
 	Validator.prototype.validFeilds = {};
 
 	/**
-	 * 参数格式
+	 * 参数格式示例
 	 */
-	Validator.prototype.paramFields = {
+	Validator.prototype.paramDemoField = {
 		"selector" : {
-			"value" : undefined,
-			"rules" : {
+			value : undefined,
+			rules : {
 				required : true
 			},
-			"msg" : {
+			msg : {
 				required : "msg"
 			},
-			"event" : undefined,
-			"msgSelector" : "msg_Selector",
-			"callback" : undefined
+			event : undefined,
+			msgSelector : "msg_Selector",
+			callback : undefined
 		}
 	};
 
@@ -308,6 +308,7 @@
 	 * 
 	 * @Title:validateAll
 	 * @Description:全量验证
+	 * @param callback
 	 * @author ZHAOBO
 	 * @修改时间：2015年12月25日 上午10:07:13
 	 * @修改内容：创建
