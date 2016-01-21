@@ -11,6 +11,9 @@
 	 * 验证类
 	 */
 	var Validator = function(fields) {
+		// 初始化基本信息
+		this.errors = [];// 清空错误信息
+		// 初始化校验列表
 		this.initFields(fields);
 	};
 
@@ -42,8 +45,12 @@
 	 */
 	Validator.prototype.validateRules = {
 		required : function(value, param, msg) {
-			return (typeof value !== 'undefined' && value !== null && value !== "") ? null
-					: msg;
+			if (value instanceof Array) {
+				return value.length > 0 ? null : msg;
+			} else {
+				return (typeof value !== 'undefined' && value !== null && value !== "") ? null
+						: msg;
+			}
 		},
 		identityCard : function(value, param, msg) {
 			var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/ig;
@@ -84,7 +91,9 @@
 			var field = fields[name];
 			field.name = name;
 			var elements = document.querySelectorAll(field.name);
-			field.type = (elements.length > 0 ? elements[0].type : undefined);
+
+			field.type = (elements.length > 0 ? this.initType(elements[0])
+					: undefined);
 			// 获取value值
 			field.valiValue = function() {
 				return _this.getValue(this);
@@ -104,6 +113,26 @@
 		}
 		// 暂存验证规则
 		this.validFeilds = fields;
+	};
+
+	/**
+	 * 获取节点类型
+	 */
+	Validator.prototype.initType = function(element) {
+		// 节点名称
+		var nodeName = element.nodeName.toLowerCase();
+		if (nodeName === "input") {
+			var inputType = element.getAttribute("type");
+			if (inputType === "radio" || inputType === "checkbox") {
+				return inputType;
+			} else {
+				// 非特殊处理的仅返回input属性名
+				return nodeName;
+			}
+		} else {
+			// 其他情况直接返回节点名称
+			return nodeName;
+		}
 	};
 
 	/**
@@ -142,11 +171,15 @@
 					}
 				}
 				return valueArr;
-			} else if (field.type !== undefined) {
-				// input
+			} else if (field.type === "input" || field.type === "select") {
+				// input/select
 				return elements[0].value;
 			} else {
 				// object
+				// 抛出异常，无法在未自定义获取value方法的情况下自动获取待校验的值
+				throw new Error(
+						"No Value Function for Object Field, Need Param 'value' / 无法自动获取Object类型输入域的值，需要value参数方法指定 Selector : ["
+								+ field.name + "]");
 				return null;
 			}
 		}
@@ -172,6 +205,11 @@
 			elements[0].addEventListener("blur", function() {
 				_this.trigger(this, "validate");
 			}, false);
+		} else if (field.type === "select") {
+			// select
+			elements[0].addEventListener("change", function() {
+				_this.trigger(this, "validate");
+			}, false);
 		} else if (field.type === "radio" || field.type === "checkbox") {
 			// radio || checkbox
 			for (i = 0; i < elements.length; i++) {
@@ -179,13 +217,17 @@
 					_this.trigger(this, "validate");
 				}, false);
 			}
-		} else if (field.type !== undefined) {
+		} else if (field.type === "input") {
 			// input
 			elements[0].addEventListener("blur", function() {
 				_this.trigger(this, "validate");
 			}, false);
 		} else {
 			// object
+			// 抛出异常，无法在未自定义触发validate事件方法的情况下自动绑定触发方式
+			throw new Error(
+					"No Event Function for Object Field, Need Param 'event' / 无法为Object类型输入域自动绑定触发验证方式，需要event参数指定 Selector : ["
+							+ field.name + "]");
 			// nothing;
 		}
 	};
@@ -227,10 +269,19 @@
 		} else {
 			// 循环执行规则校验
 			for ( var key in field.rules) {
+				// 获取提示信息
+				var msg = field.msg[key] || this.defaultMsg[key];
 				var error = this.validateRules[key](value, field.rules[key],
-						field.msg[key] || this.defaultMsg[key]);
+						msg);
 				if (typeof error !== "undefined" && error !== null) {
 					errors.push(error);
+					// 全局记录错误信息
+					this.errors.indexOf(error) > -1 ? null : this.errors
+							.push(error);
+				} else {
+					// 若存在该错误信息且验证通过，则移除该信息
+					var index = this.errors.indexOf(msg);
+					index > -1 ? this.errors.splice(index, 1) : null;
 				}
 			}
 		}
@@ -262,14 +313,16 @@
 	 * @修改内容：创建
 	 */
 	Validator.prototype.validateAll = function(callback) {
+		// 清空全局错误信息
+		this.errors = [];
 		var result = true;
 		for ( var name in this.validFeilds) {
 			var field = this.validFeilds[name];
 			// 执行校验方法
 			result = (this.validate(field) && result);
 		}
-		// 判断执行回调
-		typeof error !== 'undefined' ? callback(result) : null;
+		// 当存在回调时，启动回调并传入校验结果和错误提示数组
+		typeof callback !== "undefined" ? callback(result, this.errors) : null;
 		// 执行返回
 		return result;
 	};

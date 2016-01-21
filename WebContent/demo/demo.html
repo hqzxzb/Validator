@@ -17,6 +17,7 @@
 				<div>
 					<input type="text" class="name" placeholder="请输入姓名……" />
 				</div>
+				<div class="msg name_msg"></div>
 			</div>
 			<div class="input_area">
 				<div>
@@ -26,6 +27,7 @@
 					<input type="radio" id="sex" name="sex" class="sex" value="M" />男
 					<input type="radio" id="sex" name="sex" class="sex" value="F" />女
 				</div>
+				<div class="msg sex_msg"></div>
 			</div>
 			<div class="input_area">
 				<div>
@@ -34,6 +36,7 @@
 				<div>
 					<input type="text" class="birthday" placeholder="请输入出生日期……" />
 				</div>
+				<div class="msg birthday_msg"></div>
 			</div>
 			<div class="input_area">
 				<div>
@@ -41,10 +44,12 @@
 				</div>
 				<div>
 					<select class="cardType">
+						<option value="">请选择……</option>
 						<option value="I">身份证</option>
 						<option value="O">其他</option>
 					</select>
 				</div>
+				<div class="msg cardType_msg"></div>
 			</div>
 			<div class="input_area">
 				<div>
@@ -53,6 +58,7 @@
 				<div>
 					<input type="text" class="cardNo" placeholder="请输入证件号码……" />
 				</div>
+				<div class="msg cardNo_msg"></div>
 			</div>
 			<div class="input_area">
 				<div>
@@ -66,6 +72,7 @@
 					<input type="checkbox" id="interest" name="interest" class="interest" value="C++" />C++<br />
 					<input type="checkbox" id="interest" name="interest" class="interest" value="Python" />Python<br />
 				</div>
+				<div class="msg interest_msg"></div>
 			</div>
 			<div class="input_area">
 				<div>
@@ -74,6 +81,7 @@
 				<div>
 					<input type="password" class="password" placeholder="请输入密码……" />
 				</div>
+				<div class="msg password_msg"></div>
 			</div>
 			<div class="input_area">
 				<div>
@@ -82,8 +90,22 @@
 				<div>
 					<textarea rows="3" class="remark" placeholder="请输入备注……"></textarea>
 				</div>
+				<div class="msg remark_msg"></div>
+			</div>
+			<div class="input_area">
+				<div>
+					<label>自定义值：</label>
+				</div>
+				<div>
+					<div class="custom" data-val="1">自定义输入值</div>
+				</div>
+				<div class="msg custom_msg"></div>
 			</div>
 		</form>
 	</div>
+	
+	<!-- Load JavaScript -->
+	<script type="text/javascript" src="../js/validator.js"></script>
+	<script type="text/javascript" src="demo.js"></script>
 </body>
 </html>
