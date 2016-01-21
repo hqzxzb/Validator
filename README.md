@@ -15,16 +15,23 @@
 
 	var validator = new Validator({
 		"selector" : {
-			"value" : undefined,
-			"rules" : {
+			value : function() {
+				// Do something;
+				// return value;
+			},
+			rules : {
 				required : true
 			},
-			"msg" : {
+			msg : {
 				required : "msg"
 			},
-			"event" : undefined,
-			"msgSelector" : "msg_Selector",
-			"callback" : undefined
+			event : function() {
+				// Do something to Set Process for trigger 'validate' Event;
+			},
+			msgSelector : "msg_Selector",
+			callback : function(errors) {
+				// Do something;
+			}
 		}
 	});
 
@@ -32,11 +39,11 @@
 
 |参数名|值|
 |:-------------------------------:|:------------------------------------------------------------------|
-|selector|输入元素筛选器字符串。元素可以为input/textarea/radio/checkbox/其他元素。当为input/textarea/radio/checkbox时，可自动获取结果进行验证，当为其他元素时，需要通过value参数指定获取值的方法。|
+|selector|输入元素筛选器字符串。元素可以为input/textarea/radio/checkbox/select/其他元素。当为input/textarea/radio/checkbox/select时，可自动获取结果进行验证，当为其他元素时，需要通过value参数指定获取值的方法。|
 |value|待验证的值获取方法，若框架无法自动获取，需要通过该参数自定义值获取方法function，自定义方法需返回待验证的值。|
 |rules|验证规则，及规则需要的输入参数。可配置多个。|
 |msg|验证规则验证失败的提示信息，每一个规则对应一个提示信息，若不设定，则使用默认提示信息。|
-|event|验证事件绑定的方式，若为input/textarea/radio/checkbox将默认绑定为<code>blur</code>事件，若需要自定义，可通过此参数设定具体的事件逻辑，触发元素的<code>validate</code>事件。|
+|event|验证事件绑定的方式，若为input/textarea/radio/checkbox/select将默认绑定为<code>blur</code>、<code>click</code>、<code>change</code>事件，若需要自定义，可通过此参数设定具体的事件逻辑，触发元素的<code>validate</code>事件。|
 |msgSelector|提示信息显示位置筛选器字符串。框架根据该参数将该元素设定的验证规则中第一个验证失败的提示信息，显示到筛选器字符串指定的元素HTML代码中。|
 |callback|验证完成回调方法，默认传入参数为错误信息数组error[]，可根据使用场景设定自定义回调方法。|
 
@@ -44,7 +51,7 @@
 
 |方法名|参数|说明|
 |:-------------------------------:|:-------------------------------:|:-----------------------------------------------|
-|validateAll|无|统一执行一次验证，并返回验证结果。|
+|validateAll|callback（回调方法，回调参数为result:最终结果boolean、errors:错误信息数组）|统一执行一次验证，并返回验证结果。|
 |addRule|rule（规则名）, fn（规则方法）, message（提示信息）|自定义规则。规则方法格式为function(value, param, msg)，其中value为输入值，param为规则参数，msg为提示信息，规则方法需要使用这些参数进行规则校验并返回提示信息，若验证通过则返回null。|
 
 ## 默认规则
