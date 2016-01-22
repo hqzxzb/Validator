@@ -13,10 +13,14 @@
 var fields = {
 	".name" : {
 		rules : {
-			required : true
+			required : true,
+			maxLength : 20,
+			minLength : 5
 		},
 		msg : {
-			required : "请输入姓名"
+			required : "请输入姓名",
+			maxLength : "姓名不能超过%{0}个字符",
+			minLength : "姓名不能少于%{0}个字符"
 		},
 		msgSelector : ".name_msg"
 	},
@@ -67,10 +71,12 @@ var fields = {
 	},
 	".password" : {
 		rules : {
-			required : true
+			required : true,
+			rangeLength : [ 6, 16 ]
 		},
 		msg : {
-			required : "请输入密码"
+			required : "请输入密码",
+			rangeLength : "密码必须为%{0}到%{1}位"
 		},
 		msgSelector : ".password_msg"
 	},
@@ -122,13 +128,30 @@ var fields = {
 	".money" : {
 		rules : {
 			required : true,
-			number : null
+			number : null,
+			max : 100000,
+			min : 100
 		},
 		msg : {
 			required : "请输入金额",
-			number : "请输入正确的金额"
+			number : "请输入正确的金额",
+			max : "最多可以输入%{0}的金额",
+			min : "最少可以输入%{0}的金额"
 		},
 		msgSelector : ".money_msg"
+	},
+	".money2" : {
+		rules : {
+			required : true,
+			number : null,
+			range : [ 100, 100000 ]
+		},
+		msg : {
+			required : "请输入金额",
+			number : "请输入正确的金额",
+			range : "金额必须在%{0}到%{1}之间的金额"
+		},
+		msgSelector : ".money2_msg"
 	}
 };
 // 初始化验证器

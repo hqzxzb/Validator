@@ -74,6 +74,25 @@
 		number : function(value, param, msg) {
 			var reg = /^(?:-?[1-9]{1}\d+|-?[1-9]{1}\d{0,2}(,\d{3})*|0){1}(?:\.\d+)?$/;
 			return reg.test(value) ? null : msg;
+		},
+		maxLength : function(value, param, msg) {
+			return value.length <= param ? null : msg;
+		},
+		minLength : function(value, param, msg) {
+			return value.length >= param ? null : msg;
+		},
+		rangeLength : function(value, param, msg) {
+			return (value.length >= param[0] && value.length <= param[1]) ? null
+					: msg;
+		},
+		max : function(value, param, msg) {
+			return value <= param ? null : msg;
+		},
+		min : function(value, param, msg) {
+			return value >= param ? null : msg;
+		},
+		range : function(value, param, msg) {
+			return (value >= param[0] && value <= param[1]) ? null : msg;
 		}
 	};
 
@@ -85,9 +104,15 @@
 		identityCard : "身份证号格式不正确",
 		mobile : "手机号格式不正确",
 		email : "邮箱格式不正确",
-		equals : "不等于 %{0}",
+		equals : "不等于%{0}",
 		url : "URL格式不正确",
-		number : "数字格式不正确"
+		number : "数字格式不正确",
+		maxLength : "超过最大长度%{0}",
+		minLength : "小于最小长度%{0}",
+		rangeLength : "长度必须在%{0}到%{1}之间",
+		max : "超过最大值%{0}",
+		min : "小于最小值%{0}",
+		range : "值必须在%{0}到%{1}之间"
 	};
 
 	/**
